@@ -8,8 +8,9 @@ import google.auth.transport.requests
 import random
 
 app = Flask(__name__)
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
+#openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = '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'
 
 @app.route("/", methods=("GET", "POST"))
 def index():
@@ -28,7 +29,7 @@ def index():
 #        print("Setting = "+setting_text+", character1 = "+character1_text+", character2 = "+character2_text+", plot = "+plot_text+", style = "+style)
 
         setting_list = ["rain forest", "ocean", "beach", "desert", "stream", "a universe we haven't explored yet", "under a rock", "waterfall"]
-        character_list = ["Sally the Garden Salamander", "Tanya the Tarantula", "Edgar the European Glass Lizard", "Kauri the Kaka", "Pablo the Pseudomys", "a goldendoodle"]
+        character_list = ["a Garden Salamander named Sally", "a Tarantula named Tanya", "a European Glass Lizard named Edgar", "a Kaka named Kauri", "a Pseudomys named Pablo", "a goldendoodle"]
 
         plot_list = ["reduce poverty", "feed the hungry", "heal the sick", "teach each other something", "make a world that's equal for all", "help people have clean water", "invent new energy technology", "make better infrastructure for their community", "reduce climate change", "protect endangered species", "resolve a conflict", "find a million dogs", "dancing together"]
         style_list = ["child's drawing", "Van Gogh", "magic marker drawing", "Toulouse-Latrec", "Colored pencil", "squirrel"]
