@@ -52,7 +52,7 @@ def index():
        )
         story_text = story_text.choices[0].text
 #        print("*********************\n"+story_text+"\n*********************")
-        generate_new_images = False
+        generate_new_images = True
         if generate_new_images:
             #style = "a well done drawing by a girl"
 
