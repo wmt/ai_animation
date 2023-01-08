@@ -64,11 +64,3 @@ input[type="submit"] {
   font-weight: bold;
   margin-top: 40px;
 }
-
-div#loading {
-    width: 35px;
-    height: 35px;
-    display: none;
-    background: url(/static/loadingimage.gif) no-repeat;
-    cursor: wait;
-    }

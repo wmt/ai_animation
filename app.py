@@ -27,11 +27,11 @@ def index():
         style = request.form["style_text"]
 #        print("Setting = "+setting_text+", character1 = "+character1_text+", character2 = "+character2_text+", plot = "+plot_text+", style = "+style)
 
-        setting_list = ["rain forest", "ocean", "beach", "desert", "stream", "a universe we haven't explored yet", "under a rock", "waterfall"]
+        setting_list = ["rain forest", "ocean", "beach", "desert", "stream", "grotto"]
         character_list = ["a Garden Salamander named Sally", "a Tarantula named Tanya", "a European Glass Lizard named Edgar", "a Kaka named Kauri", "a Pseudomys named Pablo", "a goldendoodle"]
 
         plot_list = ["reduce poverty", "feed the hungry", "heal the sick", "teach each other something", "make a world that's equal for all", "help people have clean water", "invent new energy technology", "make better infrastructure for their community", "reduce climate change", "protect endangered species", "resolve a conflict", "find a million dogs", "dancing together"]
-        style_list = ["child's drawing", "Van Gogh", "magic marker drawing", "Toulouse-Latrec", "Colored pencil", "squirrel"]
+        style_list = ["child's drawing", "magic marker drawing", "Colored pencil"]
 
         if setting_text == "":
             setting_text = random.choice(setting_list)
@@ -46,7 +46,7 @@ def index():
 
         story_text = openai.Completion.create(
            model="text-davinci-002",
-           prompt=generate_prompt("Write a long three paragraph story about a "+character1_text+ " and a "+character2_text+". The plot is "+plot_text+" and it takes place in a "+setting_text+". Please include lots of detail about all aspects of the story."),
+           prompt=generate_prompt("Write a long five paragraph story about a "+character1_text+ " and a "+character2_text+". The plot is "+plot_text+" and it takes place in a "+setting_text+". Please include lots of detail about all aspects of the story."),
            temperature=0.9,
             max_tokens=1200
        )
@@ -190,13 +190,13 @@ def index():
 
 
 
-        return redirect(url_for("index", setting_text=setting_text, setting_image=setting_image, character1_image=character1_image_transparent, character2_image=character2_image_transparent))
+        return redirect(url_for("index",story_text=story_text, setting_image=setting_image, character1_image=character1_image_transparent, character2_image=character2_image_transparent))
 
-    setting_text = request.args.get("setting_text")
+    story_text = request.args.get("story_text")
     setting_image = request.args.get("setting_image")
     character1_image = request.args.get("character1_image")
     character2_image = request.args.get("character2_image")
-    return render_template("index.html", setting_text=setting_text, setting_image=setting_image, character1_image=character1_image, character2_image=character2_image)
+    return render_template("index.html", story_text=story_text, setting_image=setting_image, character1_image=character1_image, character2_image=character2_image)
 
 
 def generate_prompt(setting_text):
