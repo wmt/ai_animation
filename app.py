@@ -46,7 +46,7 @@ def index():
 
         story_text = openai.Completion.create(
            model="text-davinci-002",
-           prompt=generate_prompt("Write a long five paragraph story about a "+character1_text+ " and a "+character2_text+". The plot is "+plot_text+" and it takes place in a "+setting_text+". Please include lots of detail about all aspects of the story."),
+           prompt=generate_prompt("Write a long five paragraph story about a "+character1_text+ " and a "+character2_text+". The plot is a metaphor for "+plot_text+" and it takes place in a "+setting_text+". Please include lots of detail about all aspects of the story."),
            temperature=0.9,
             max_tokens=1200
        )

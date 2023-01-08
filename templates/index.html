@@ -21,22 +21,24 @@
   </form>
    <div id="loading" style="padding:10px;visibility:hidden"><img style="width:60px;height:60px" src = "static/loadingimage.gif"></div>
 
-
+<div>
   {% if setting_image %}
-  <div><img style="position:absolute;top:0px;right:400px;height:800px;width:800px" src ="{{  setting_image  }}"/></div>
+<!--  <div><img style="position:absolute;top:0px;right:400px;height:800px;width:800px" src ="{{  setting_image  }}"/></div>-->
+  <img style="position:absolute;top:5vh;left:7.5vw;height:85vh;width:85vw" src ="{{  setting_image  }}"/>
   {% endif %}
 
   {% if character1_image %}
-  <div><img id = "character1_image" style="position:absolute;top:500px;left:1100px" src ="{{  character1_image  }}"/></div>
+  <img id = "character1_image" style="position:absolute;top:60vh;left:105vw" src ="{{  character1_image  }}"/>
   {% endif %}
 
   {% if character2_image %}
-  <div><img id = "character2_image" style="position:absolute;top:500px;left:100px" src ="{{  character2_image  }}"/></div>
+  <img id = "character2_image" style="position:absolute;top:60vh;left:-5vw" src ="{{  character2_image  }}"/>
   {% endif %}
 
       {% if story_text %}
-  <div style="position:absolute;top:830px;left:50px">{{  story_text }}</div>
+  <div style="position:absolute;top:90vh;left:7.5vw;width:85vw">{{  story_text }}</div>
   {% endif %}
+  </div>
 <script>
   timer = 0
   playingSoundEffect = false;
@@ -45,27 +47,27 @@
 	timer +=8;
 	if (timer < 80){
 	  var character1_image = document.getElementById("character1_image");
-	  if (character1_image.style.left == "") {
-	    character1_image.style.left = "10px";
-	  } else {
-	    character1_image.style.left = (parseInt(character1_image.style.left) - timer) + "px";
+	  if (character1_image.style.left != "") {
+	    character1_image.style.left = (parseInt(character1_image.style.left) - (parseInt(character1_image.style.left)-50)/3) + "vw";
+	    console.log("character1_image.style.left = "+character1_image.style.left);
 	  }
 
 	  var character2_image = document.getElementById("character2_image");
-	  if (character2_image.style.left == "") {
-	    character2_image.style.left = "10px";
-	  } else {
-	    character2_image.style.left = (parseInt(character2_image.style.left) + timer) + "px";
+	  if (character2_image.style.left != "") {
+	    character2_image.style.left = (parseInt(character2_image.style.left) + (30-parseInt(character2_image.style.left))/3) + "vw";
+	    console.log("character2_image.style.left = "+character2_image.style.left);
 	  }
     }
 	var character1_image = document.getElementById("character1_image");
 	var character2_image = document.getElementById("character2_image");
-	character1_image.style.left = (parseInt(character1_image.style.left) + (Math.random()*30.0-10.0)/100.0) + "px";
-	character2_image.style.left = (parseInt(character2_image.style.left) + (Math.random()*30.0-10.0)/100.0) + "px";
+	character1_image.style.left = (parseInt(character1_image.style.left) + Math.random()/20) + "vw";
+	character2_image.style.left = (parseInt(character2_image.style.left) + Math.random()/20) + "vw";
+	character1_image.style.top = (parseInt(character1_image.style.top) + Math.random()/10) + "vh";
+	character2_image.style.top = (parseInt(character2_image.style.top) + Math.random()/10) + "vh";
 
     if (!playingSoundEffect){
     var audio;
-    if (Math.random()<0.33){
+    if (Math.random()<0.6){
       audio = new Audio('static/the-beat-of-nature-122841.mp3');
     } else if (Math.random()<0.5){
       audio = new Audio('static/happy-day-113985.mp3');
@@ -82,6 +84,12 @@
     audio = new Audio('static/output.mp3');
     console.log("playing");
     audio.play();
+
+
+//const soundEffect = new Audio();
+//soundEffect.autoplay = true;
+//soundEffect.src = 'output.mp3';
+
     playingVoice = true;
   }
 }
