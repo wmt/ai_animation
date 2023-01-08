@@ -3,19 +3,100 @@
   <title>OpenAI Quickstart</title>
   <link
     rel="shortcut icon"
-    href="{{ url_for('static', filename='dog.png') }}"
+    href="{{ url_for('static', filename='shark.png') }}"
   />
   <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
 </head>
 
 <body>
-  <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />
-  <h3>Name my pet</h3>
+    <div id="loading">Hi</div>
+    <div id="content">
+<!--  <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />-->
+  <h3>AI story</h3>
   <form action="/" method="post">
-    <input type="text" name="animal" placeholder="Enter an animal" required />
-    <input type="submit" value="Generate names" />
+    <input type="text" name="setting_text" placeholder="Describe the setting, or leave blank for random" />
+    <input type="text" name="character1_text" placeholder="Describe the first character, or leave blank for random"  />
+    <input type="text" name="character2_text" placeholder="Describe a second character, or leave blank for random"  />
+    <input type="text" name="plot_text" placeholder="Describe the plot, or leave blank for random"  />
+    <input type="text" name="style_text" placeholder="Describe the style, or leave blank for random"  />
+    <input type="submit" value="Generate movie"  onclick="loading();"/>
   </form>
-  {% if result %}
-  <div class="result">{{ result }}</div>
+      </div>
+<!--{% if setting_text %}
+  <div class="setting_text">{{  setting_text }}</div>
   {% endif %}
+-->
+  {% if setting_image %}
+  <div><img style="position:absolute;top:0px;right:256px" src ="{{  setting_image  }}"/></div>
+  {% endif %}
+
+  {% if character1_image %}
+  <div><img id = "character1_image" style="position:absolute;top:500px;left:1100px" src ="{{  character1_image  }}"/></div>
+  {% endif %}
+
+  {% if character2_image %}
+  <div><img id = "character2_image" style="position:absolute;top:500px;left:100px" src ="{{  character2_image  }}"/></div>
+  {% endif %}
+
+<script>
+  timer = 0
+  playingSoundEffect = false;
+  playingVoice = false;
+	function myTimer() {
+	timer +=8;
+	if (timer < 80){
+	  var character1_image = document.getElementById("character1_image");
+	  if (character1_image.style.left == "") {
+	    character1_image.style.left = "10px";
+	  } else {
+	    character1_image.style.left = (parseInt(character1_image.style.left) - timer) + "px";
+	  }
+
+	  var character2_image = document.getElementById("character2_image");
+	  if (character2_image.style.left == "") {
+	    character2_image.style.left = "10px";
+	  } else {
+	    character2_image.style.left = (parseInt(character2_image.style.left) + timer) + "px";
+	  }
+
+}
+	  var character1_image = document.getElementById("character1_image");
+	  var character2_image = document.getElementById("character2_image");
+	  	    character1_image.style.left = (parseInt(character1_image.style.left) + (Math.random()*30.0-10.0)/100.0) + "px";
+	  	    character2_image.style.left = (parseInt(character2_image.style.left) + (Math.random()*30.0-10.0)/100.0) + "px";
+
+if (!playingSoundEffect){
+var audio;
+ if (Math.random()<0.33)
+ {
+ audio = new Audio('static/the-beat-of-nature-122841.mp3');
+ }else if (Math.random()<0.5){
+ audio = new Audio('static/happy-day-113985.mp3');
+ }
+ else{
+ audio = new Audio('static/motivational-epic-music-inspiring-cinematic-background-music-124265.mp3');
+ }
+console.log("playing");
+audio.volume = 0.1;
+audio.play();
+playingSoundEffect = true;
+}
+if (!playingVoice && timer > 70){
+
+var audio;
+ audio = new Audio('static/output.mp3');
+console.log("playing");
+audio.play();
+playingVoice = true;
+
+}
+	}
+		var myVar = setInterval(myTimer, 100);
+
+        function loading(){
+          console.log("Adding loading screen.");
+            $("#loading").show();
+            $("#content").hide();
+        }
+</script>
 </body>
