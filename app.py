@@ -9,8 +9,7 @@ import random
 
 app = Flask(__name__)
 
-#openai.api_key = os.getenv("OPENAI_API_KEY")
-openai.api_key = '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'
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route("/", methods=("GET", "POST"))
 def index():
