@@ -28,8 +28,9 @@ def index():
 #        print("Setting = "+setting_text+", character1 = "+character1_text+", character2 = "+character2_text+", plot = "+plot_text+", style = "+style)
 
         setting_list = ["rain forest", "ocean", "beach", "desert", "stream", "grotto"]
-        character_list = ["A boy named Bob", "a nonbinary person named Kori", "a girl named Dominique", "a girl named Jasmine", "a boy named Jalen", "a boy named Malik", "a girl named Min", "a girl named Mei", "a boy named Mako", "a boy named Ajay", "a girl named Divya", "a girl named Ayla", "a Garden Salamander named Sally", "a Tarantula named Tanya", "a European Glass Lizard named Edgar", "a Kaka named Kauri", "a Pseudomys named Pablo", "a goldendoodle"]
-        plot_list = ["reduce poverty", "feed the hungry", "heal the sick", "teach each other something", "make a world that's equal for all", "help people have clean water", "invent new energy technology", "make better infrastructure for their community", "reduce climate change", "protect endangered species", "resolve a conflict", "find a million dogs", "dancing together"]
+#        character_list = ["A boy named Bob who loves endangered species", "a nonbinary person named Kori who takes care of all the local stray animals", "a girl named Dominique who is an inventor", "a girl named Jasmine who is in school to be a doctor", "a boy named Jalen who runs a local charity", "a boy named Malik who works in an animal shelter", "a girl named Min who started a food bank", "a girl named Mei", "a boy named Mako", "a boy named Ajay", "a girl named Divya", "a girl named Ayla", "a Garden Salamander named Sally", "a Tarantula named Tanya", "a European Glass Lizard named Edgar", "a Kaka named Kauri", "a Pseudomys named Pablo", "a goldendoodle"]
+        character_list = ["A boy named Bob", "a nonbinary person named Kori", "a girl named Dominique", "a girl named Jasmine", "a boy named Jalen", "a boy named Malik", "a girl named Min who started a food bank", "a girl named Mei", "a boy named Mako", "a boy named Ajay", "a girl named Divya", "a girl named Ayla", "a Garden Salamander named Sally", "a Tarantula named Tanya", "a European Glass Lizard named Edgar", "a Kaka named Kauri", "a Pseudomys named Pablo", "a goldendoodle"]
+        plot_list = ["something about reducing poverty by combining their skills", "something about feeding the hungry in the place where they live", "something about healing the sick using new technology", "something about teaching each other something interesting about the world", "make a world that's equal for all", "help people have clean water", "invent new energy technology", "make better infrastructure for their community", "reduce climate change", "protect endangered species", "resolve a conflict in their neighborhood"]
  #       style_list = ["child's drawing", "magic marker drawing", "Studio Ghibli"]
 
         # setting_list = ["a random place"]
@@ -48,13 +49,18 @@ def index():
         if style == "":
             style = random.choice(style_list)
 
-        prompt = "Write a story, at least 20 sentences long, written for an elementary school child, about "+character1_text+ " and "+character2_text+". The two of them "+plot_text+". It takes place in a "+setting_text+"."
+#        prompt = "Write 10 sentences that tell a story with a clear beginning, an exciting middle, and a satisfying end, at a second grade reading level and appropriate for young children, about "+character2_text+ " and "+character1_text+" doing the following: "+plot_text+". It takes place in a "+setting_text+"."
+        prompt = "Write 5 long paragraphs, at a second grade reading level and appropriate for young children, about "+character2_text+ " and "+character1_text+" doing the following: "+plot_text+" in a "+setting_text+". A short version of a story would be: Once upon a time, there was a girl named Sarah. She was walking down the street when she fell down. Her friend Sam helped her get back up. An expanded version of the story would be: Once upon a time, a girl named Sarah was walking down the street. It was cold outside, so she was wearing a winter parka, long pants, and boots. She was a kind girl with long dark hair and an easy smile. As she was walking, she didn't notice an icy patch in the middle of the sidewalk. It had snowed a few days earlier, and then warmed up, and froze again, so many areas of the city were icy. When Sarah stepped on the ice, her boots went out from under her and she fell down hard. It hurt a lot, and she started to cry. Her friend Sam, a slightly older boy with long hair and Doc Martin boots, happened to be walking along the same street and noticed her crying. He ran over, helped her up, and asked her if she was okay.  She said yes, and felt better that he had stopped. Sam made sure she got to her destination safely. Sarah thanked him, and bought him a cupcake to show her gratitude. The end.  The story you write should be like the expanded version. There should be no sex or violence."
         print("Prompt = "+prompt)
         story_text = openai.Completion.create(
             model="text-davinci-003",
-            max_tokens=2048,
+#            model="text-curie-001",
+#            model="text-babbage-001",
+            max_tokens=1048,
             prompt=generate_prompt(prompt),
-            temperature=0.9
+            #temperature=0.9
+            top_p=1.0,
+        logit_bias = {50256: -5}
        )
         story_text = story_text.choices[0].text
 #        print("*********************\n"+story_text+"\n*********************")
@@ -69,19 +75,20 @@ def index():
 #            style = "an animated television show"
             setting_image = openai.Image.create(
                 #            prompt="An animated background for a story that looks like "+setting_text.choices[0].text,
-                prompt="A background in the "+style+" style that looks like " + setting_text,
+                prompt="A complex background that looks like " + setting_text+" with a clear area in the center in the "+style+" style.",
                 n=1,
                 size="1024x1024"
             )
             character1_image = openai.Image.create(
-                prompt="A white background with "+character1_text+" character centered in the "+style+" style. The character is facing to the left. The background behind the character is completely white. The entire character is in the center of the picture. The character fits completely in the picture with no overlap with the edges.",
+                prompt="A small "+character1_text+" character with its whole body and all its limbs centered on a completely white background, standing on completely white ground, with no visible horizon.  The character is in the "+style+" style. The character is facing to the left. The entire character is in the center of the picture, and the background is completely white all around the character. ",
                 #prompt="The background is completely white. In the center there is a character in the "+style+" style of a "+character1_text+" facing to the left. Do not allow gigantic characters such as anything that doesn't fit in the box. ",
                 n=1,
                 size="512x512"
             )
             character2_image = openai.Image.create(
                 # prompt="A wide shot of a single animated character in the "+style+" style of a "+character2_text+" facing to the right. The background behind the character is completely white. Nothing else besides the character is in the picture. The entire character is in the center of the picture. The character fits in the picture with no overlap with the edges. The characters are very small.",
-                prompt="A white background with "+character2_text+" character centered in the "+style+" style. The character is facing to the right. The background behind the character is completely white. The entire character is in the center of the picture. The character fits completely in the picture with no overlap with the edges.",
+#                prompt="A white background with "+character2_text+" character centered in the "+style+" style. The character is facing to the right. The background behind the character is completely white. The entire character is in the center of the picture. The character fits completely in the picture with no overlap with the edges.",
+                prompt="A small "+character2_text+" character with its whole body and all its limbs centered on a completely white background, standing on completely white ground, with no visible horizon.  The character is in the "+style+" style. The character is facing to the left. The entire character is in the center of the picture, and the background is completely white all around the character. ",
                 n=1,
                 size="512x512"
             )
