@@ -10,7 +10,7 @@
 
 <body>
       <!--  <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />-->
-  <h3><center>AI story</center></h3>
+  <h3><center>Make a story!</center></h3>
   <form action="/" method="post">
     <input type="text" name="setting_text" placeholder="Describe the setting, or leave blank for random" />
     <input type="text" name="character1_text" placeholder="Describe the first character, or leave blank for random"  />
@@ -19,43 +19,46 @@
     <input type="text" name="style_text" placeholder="Describe the style, or leave blank for random"  />
     <input type="submit" value="Generate movie"  onclick="loading();"/>
   </form>
-   <div id="loading" style="padding:10px;visibility:hidden"><img style="width:60px;height:60px" src = "static/loadingimage.gif"></div>
+   <div id="loading" style="visibility:hidden;padding:10px"><img style="width:60px;height:60px" src = "static/loadingimage.gif"></div>
 
 <div>
   {% if setting_image %}
-  <button id = "startMovie" style="position:absolute;top:0vh;font-size:24px">Start Movie</button>
 <!--  <div><img style="position:absolute;top:0px;right:400px;height:800px;width:800px" src ="{{  setting_image  }}"/></div>-->
-  <img style="position:absolute;top:5vh;left:7.5vw;height:85vh;width:85vw" src ="{{  setting_image  }}"/>
+  <img id = "setting" style="position:absolute;top:5vh;left:7.5vw;height:85vh;width:85vw" src ="{{  setting_image  }}"/>
+  <button id = "startMovie" style="z-index:100;position:absolute;top:0vh;left:0vh;font-size:240px;padding:50px">Click to start the movie!</button>
+
   {% endif %}
 
   {% if character1_image %}
-  <img id = "character1_image" style="position:absolute;top:60vh;left:105vw" src ="{{  character1_image  }}"/>
+  <img id = "character1_image" style="position:absolute;top:60vh;left:77vw" src ="{{  character1_image  }}"/>
   {% endif %}
 
   {% if character2_image %}
-  <img id = "character2_image" style="position:absolute;top:60vh;left:-5vw" src ="{{  character2_image  }}"/>
+  <img id = "character2_image" style="position:absolute;top:60vh;left:8vw" src ="{{  character2_image  }}"/>
   {% endif %}
 
       {% if story_text %}
   <div style="position:absolute;top:90vh;left:7.5vw;width:85vw">{{  story_text }}</div>
   {% endif %}
   </div>
+
 <script>
   timer = 0
   playingSounds = false;
-	function myTimer() {
+  function myTimer() {
+	if (!playingSounds) return;
 	timer +=8;
 	if (timer < 80){
 	  var character1_image = document.getElementById("character1_image");
 	  if (character1_image.style.left != "") {
 	    character1_image.style.left = (parseInt(character1_image.style.left) - (parseInt(character1_image.style.left)-50)/3) + "vw";
-	    console.log("character1_image.style.left = "+character1_image.style.left);
+	    //console.log("character1_image.style.left = "+character1_image.style.left);
 	  }
 
 	  var character2_image = document.getElementById("character2_image");
 	  if (character2_image.style.left != "") {
 	    character2_image.style.left = (parseInt(character2_image.style.left) + (30-parseInt(character2_image.style.left))/3) + "vw";
-	    console.log("character2_image.style.left = "+character2_image.style.left);
+	    //console.log("character2_image.style.left = "+character2_image.style.left);
 	  }
     }
 	var character1_image = document.getElementById("character1_image");
@@ -64,19 +67,22 @@
 	character2_image.style.left = (parseInt(character2_image.style.left) + Math.random()/20) + "vw";
 	character1_image.style.top = (parseInt(character1_image.style.top) + Math.random()/10) + "vh";
 	character2_image.style.top = (parseInt(character2_image.style.top) + Math.random()/10) + "vh";
-
 }
 var myVar = setInterval(myTimer, 100);
 function loading(){
-  console.log("Adding loading screen.");
+  //console.log("Adding loading screen.");
   var y = document.getElementById("loading");
   y.style.visibility = "visible";
 
   console.log("Done.");
 }
 const element = document.getElementById("startMovie");
+if (element !=null){
 element.addEventListener("click", function() {
-  console.log("Start Movie");
+    var y = document.getElementById("startMovie");
+    y.style.visibility = "hidden";
+
+//  console.log("Start Movie");
    if (!playingSounds){
       var audio;
       if (Math.random()<0.6){
@@ -86,16 +92,25 @@ element.addEventListener("click", function() {
       } else {
         audio = new Audio('static/motivational-epic-music-inspiring-cinematic-background-music-124265.mp3');
       }
-      console.log("playing");
+//      console.log("playing");
       audio.volume = 0.07;
       audio.play();
       var audio2;
       audio2 = new Audio('static/output.mp3');
       audio2.volume = 1;
       audio2.play();
-      console.log("playing");
+//      console.log("playing");
       playingSounds = true;
     }
 });
+}
+//$('#setting').on('rendered', function(e) {
+function showButton(){
+      console.log("window load started");
+    //dom not only ready, but everything is loaded
+    var y = document.getElementById("startMovie");
+    y.style.visibility = "visible";
+      console.log("window load finished");
+}
 </script>
 </body>

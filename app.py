@@ -28,10 +28,10 @@ def index():
 #        print("Setting = "+setting_text+", character1 = "+character1_text+", character2 = "+character2_text+", plot = "+plot_text+", style = "+style)
 
         setting_list = ["rain forest", "ocean", "beach", "desert", "stream", "grotto"]
-        character_list = ["a Garden Salamander named Sally", "a Tarantula named Tanya", "a European Glass Lizard named Edgar", "a Kaka named Kauri", "a Pseudomys named Pablo", "a goldendoodle"]
+        character_list = ["A boy named Bob", "a nonbinary person named Kori", "a girl named Dominique", "a girl named Jasmine", "a boy named Jalen", "a boy named Malik", "a girl named Min", "a girl named Mei", "a boy named Mako", "a boy named Ajay", "a girl named Divya", "a girl named Ayla", "a Garden Salamander named Sally", "a Tarantula named Tanya", "a European Glass Lizard named Edgar", "a Kaka named Kauri", "a Pseudomys named Pablo", "a goldendoodle"]
 
         plot_list = ["reduce poverty", "feed the hungry", "heal the sick", "teach each other something", "make a world that's equal for all", "help people have clean water", "invent new energy technology", "make better infrastructure for their community", "reduce climate change", "protect endangered species", "resolve a conflict", "find a million dogs", "dancing together"]
-        style_list = ["child's drawing", "magic marker drawing", "Colored pencil"]
+        style_list = ["child's drawing", "magic marker drawing", "Studio Ghibli"]
 
         if setting_text == "":
             setting_text = random.choice(setting_list)
@@ -161,7 +161,7 @@ def index():
         # voice gender ("neutral")
         voice = texttospeech.VoiceSelectionParams(
             #https://cloud.google.com/speech-to-text/docs/speech-to-text-supported-languages
-            language_code="en-GB", ssml_gender=texttospeech.SsmlVoiceGender.FEMALE
+            language_code="en-US", ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
         )
 
         # Select the type of audio file you want returned

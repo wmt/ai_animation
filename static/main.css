@@ -15,8 +15,8 @@
 }
 body,
 input {
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 36px;
+  line-height: 40px;
   color: #353740;
   font-family: "ColfaxAI", Helvetica, sans-serif;
 }
@@ -30,7 +30,7 @@ body {
   width: 34px;
 }
 h3 {
-  font-size: 30px;
+  font-size: 50px;
   line-height: 20px;
   font-weight: bold;
   color: #202123;
@@ -39,7 +39,7 @@ h3 {
 form {
   display: flex;
   flex-direction: column;
-  width: 480px;
+  width: 75vw;
 }
 input[type="text"] {
   padding: 8px 8px;
