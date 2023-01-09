@@ -110,13 +110,13 @@ def index():
 
             #subprocess.call('color =$(convert static/shark.png -format "%[pixel:p{0,0}]" info:-)',shell=True)
 
-            command = 'convert static/character1_image_downloaded.png -brightness-contrast 10x10 static/character1_image_brighter.png'
+            command = 'convert static/character1_image_downloaded.png -brightness-contrast 20x0 static/character1_image_brighter.png'
             subprocess.call(command, shell=True)
 #            command = 'convert static/character1_image_brighter.png -transparent white static/character1_image_transparent.png'
             command = 'convert static/character1_image_brighter.png -bordercolor white -border 1x1 -alpha set -channel RGBA -fuzz 3% -fill none -floodfill +0+0 white -morphology erode square: 1 -shave 1x1 static/character1_image_transparent.png'
             subprocess.call(command, shell=True)
 
-            command = 'convert static/character2_image_downloaded.png -brightness-contrast 10x10  static/character2_image_brighter.png'
+            command = 'convert static/character2_image_downloaded.png -brightness-contrast 20x0  static/character2_image_brighter.png'
             subprocess.call(command, shell=True)
  #           command = 'convert static/character2_image_brighter.png -transparent white static/character2_image_transparent.png'
             command = 'convert static/character2_image_brighter.png -bordercolor white -border 1x1 -alpha set -channel RGBA -fuzz 3% -fill none -floodfill +0+0 white -morphology erode square: 1 -shave 1x1 static/character2_image_transparent.png'
