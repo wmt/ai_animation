@@ -29,9 +29,13 @@ def index():
 
         setting_list = ["rain forest", "ocean", "beach", "desert", "stream", "grotto"]
         character_list = ["A boy named Bob", "a nonbinary person named Kori", "a girl named Dominique", "a girl named Jasmine", "a boy named Jalen", "a boy named Malik", "a girl named Min", "a girl named Mei", "a boy named Mako", "a boy named Ajay", "a girl named Divya", "a girl named Ayla", "a Garden Salamander named Sally", "a Tarantula named Tanya", "a European Glass Lizard named Edgar", "a Kaka named Kauri", "a Pseudomys named Pablo", "a goldendoodle"]
-
         plot_list = ["reduce poverty", "feed the hungry", "heal the sick", "teach each other something", "make a world that's equal for all", "help people have clean water", "invent new energy technology", "make better infrastructure for their community", "reduce climate change", "protect endangered species", "resolve a conflict", "find a million dogs", "dancing together"]
-        style_list = ["child's drawing", "magic marker drawing", "Studio Ghibli"]
+ #       style_list = ["child's drawing", "magic marker drawing", "Studio Ghibli"]
+
+        # setting_list = ["a random place"]
+        # character_list = ["a random character, who could be a person with a name or an animal"]
+        # plot_list = ["do a random thing"]
+        style_list = ["claymation"]
 
         if setting_text == "":
             setting_text = random.choice(setting_list)
@@ -44,11 +48,13 @@ def index():
         if style == "":
             style = random.choice(style_list)
 
+        prompt = "Write a story, at least 20 sentences long, written for an elementary school child, about "+character1_text+ " and "+character2_text+". The two of them "+plot_text+". It takes place in a "+setting_text+"."
+        print("Prompt = "+prompt)
         story_text = openai.Completion.create(
-           model="text-davinci-002",
-           prompt=generate_prompt("Write a long five paragraph story about a "+character1_text+ " and a "+character2_text+". The two of them "+plot_text+". It takes place in a "+setting_text+"."),
-           temperature=0.9,
-            max_tokens=1200
+            model="text-davinci-003",
+            max_tokens=2048,
+            prompt=generate_prompt(prompt),
+            temperature=0.9
        )
         story_text = story_text.choices[0].text
 #        print("*********************\n"+story_text+"\n*********************")
@@ -71,13 +77,13 @@ def index():
                 prompt="A white background with "+character1_text+" character centered in the "+style+" style. The character is facing to the left. The background behind the character is completely white. The entire character is in the center of the picture. The character fits completely in the picture with no overlap with the edges.",
                 #prompt="The background is completely white. In the center there is a character in the "+style+" style of a "+character1_text+" facing to the left. Do not allow gigantic characters such as anything that doesn't fit in the box. ",
                 n=1,
-                size="256x256"
+                size="512x512"
             )
             character2_image = openai.Image.create(
                 # prompt="A wide shot of a single animated character in the "+style+" style of a "+character2_text+" facing to the right. The background behind the character is completely white. Nothing else besides the character is in the picture. The entire character is in the center of the picture. The character fits in the picture with no overlap with the edges. The characters are very small.",
                 prompt="A white background with "+character2_text+" character centered in the "+style+" style. The character is facing to the right. The background behind the character is completely white. The entire character is in the center of the picture. The character fits completely in the picture with no overlap with the edges.",
                 n=1,
-                size="256x256"
+                size="512x512"
             )
 #            setting_image = setting_image['data'][0]['url']
     #         character1_image = character1_image['data'][0]['url']
@@ -104,13 +110,13 @@ def index():
 
             #subprocess.call('color =$(convert static/shark.png -format "%[pixel:p{0,0}]" info:-)',shell=True)
 
-            command = 'convert static/character1_image_downloaded.png -brightness-contrast 8x8 static/character1_image_brighter.png'
+            command = 'convert static/character1_image_downloaded.png -brightness-contrast 10x10 static/character1_image_brighter.png'
             subprocess.call(command, shell=True)
 #            command = 'convert static/character1_image_brighter.png -transparent white static/character1_image_transparent.png'
             command = 'convert static/character1_image_brighter.png -bordercolor white -border 1x1 -alpha set -channel RGBA -fuzz 3% -fill none -floodfill +0+0 white -morphology erode square: 1 -shave 1x1 static/character1_image_transparent.png'
             subprocess.call(command, shell=True)
 
-            command = 'convert static/character2_image_downloaded.png -brightness-contrast 8x8  static/character2_image_brighter.png'
+            command = 'convert static/character2_image_downloaded.png -brightness-contrast 10x10  static/character2_image_brighter.png'
             subprocess.call(command, shell=True)
  #           command = 'convert static/character2_image_brighter.png -transparent white static/character2_image_transparent.png'
             command = 'convert static/character2_image_brighter.png -bordercolor white -border 1x1 -alpha set -channel RGBA -fuzz 3% -fill none -floodfill +0+0 white -morphology erode square: 1 -shave 1x1 static/character2_image_transparent.png'
@@ -161,7 +167,7 @@ def index():
         # voice gender ("neutral")
         voice = texttospeech.VoiceSelectionParams(
             #https://cloud.google.com/speech-to-text/docs/speech-to-text-supported-languages
-            language_code="en-US", ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
+            language_code="en-US", ssml_gender=texttospeech.SsmlVoiceGender.MALE
         )
 
         # Select the type of audio file you want returned

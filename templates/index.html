@@ -25,20 +25,20 @@
   {% if setting_image %}
 <!--  <div><img style="position:absolute;top:0px;right:400px;height:800px;width:800px" src ="{{  setting_image  }}"/></div>-->
   <img id = "setting" style="position:absolute;top:5vh;left:7.5vw;height:85vh;width:85vw" src ="{{  setting_image  }}"/>
-  <button id = "startMovie" style="z-index:100;position:absolute;top:0vh;left:0vh;font-size:240px;padding:50px">Click to start the movie!</button>
+  <button id = "startMovie" style="z-index:100;width:100vw;height:100vh;position:absolute;top:0vh;left:0vh;font-size:240px;padding:50px">Click to start the movie!</button>
 
   {% endif %}
 
   {% if character1_image %}
-  <img id = "character1_image" style="position:absolute;top:60vh;left:77vw" src ="{{  character1_image  }}"/>
+  <img id = "character1_image" style="position:absolute;top:30vh;left:77vw" src ="{{  character1_image  }}"/>
   {% endif %}
 
   {% if character2_image %}
-  <img id = "character2_image" style="position:absolute;top:60vh;left:8vw" src ="{{  character2_image  }}"/>
+  <img id = "character2_image" style="position:absolute;top:30vh;left:8vw" src ="{{  character2_image  }}"/>
   {% endif %}
 
       {% if story_text %}
-  <div style="position:absolute;top:90vh;left:7.5vw;width:85vw">{{  story_text }}</div>
+<!--  <div style="position:absolute;top:90vh;left:7.5vw;width:85vw">{{  story_text }}</div>-->
   {% endif %}
   </div>
 
@@ -47,8 +47,8 @@
   playingSounds = false;
   function myTimer() {
 	if (!playingSounds) return;
-	timer +=8;
-	if (timer < 80){
+	timer +=1;
+//	if (timer < 100){
 	  var character1_image = document.getElementById("character1_image");
 	  if (character1_image.style.left != "") {
 	    character1_image.style.left = (parseInt(character1_image.style.left) - (parseInt(character1_image.style.left)-50)/3) + "vw";
@@ -60,13 +60,30 @@
 	    character2_image.style.left = (parseInt(character2_image.style.left) + (30-parseInt(character2_image.style.left))/3) + "vw";
 	    //console.log("character2_image.style.left = "+character2_image.style.left);
 	  }
-    }
+//    }
 	var character1_image = document.getElementById("character1_image");
 	var character2_image = document.getElementById("character2_image");
-	character1_image.style.left = (parseInt(character1_image.style.left) + Math.random()/20) + "vw";
-	character2_image.style.left = (parseInt(character2_image.style.left) + Math.random()/20) + "vw";
-	character1_image.style.top = (parseInt(character1_image.style.top) + Math.random()/10) + "vh";
-	character2_image.style.top = (parseInt(character2_image.style.top) + Math.random()/10) + "vh";
+//	character1_image.style.left = (parseInt(character1_image.style.left) + Math.random()/20) + "vw";
+//	character2_image.style.left = (parseInt(character2_image.style.left) + Math.random()/20) + "vw";
+//	character1_image.style.top = (parseInt(character1_image.style.top) + Math.random()/10) + "vh";
+//	character2_image.style.top = (parseInt(character2_image.style.top) + Math.random()/10) + "vh";
+
+console.log("Thinking about doing flip");
+if (timer > 20 && timer <31){
+console.log("flipping...");
+  character2_image.style.transform = "rotate("+(timer-20)*36+"deg)";
+  if (timer < 26){character2_image.style.top = (parseInt(character2_image.style.top) - Math.random()*10) + "vh";}
+  else {character2_image.style.top = (parseInt(character2_image.style.top) + Math.random()*10) + "vh";}
+console.log("flipped");
+}
+if (timer > 40 && timer <51){
+console.log("flipping...");
+  character1_image.style.transform = "rotate("+(timer-40)*36+"deg)";
+  if (timer < 46){character1_image.style.top = (parseInt(character1_image.style.top) - Math.random()*10) + "vh";}
+  else {character1_image.style.top = (parseInt(character1_image.style.top) + Math.random()*10) + "vh";}
+console.log("flipped");
+}
+
 }
 var myVar = setInterval(myTimer, 100);
 function loading(){
