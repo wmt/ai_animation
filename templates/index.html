@@ -16,7 +16,7 @@
     <input type="text" name="character1_text" placeholder="Describe the first character, or leave blank for random"  />
     <input type="text" name="character2_text" placeholder="Describe a second character, or leave blank for random"  />
     <input type="text" name="plot_text" placeholder="Describe the plot, or leave blank for random"  />
-    <input type="text" name="style_text" placeholder="Describe the style, or leave blank for random"  />
+<!--    <input type="text" name="style_text" placeholder="Describe the style, or leave blank for random"  />-->
     <input type="submit" value="Generate movie"  onclick="loading();"/>
   </form>
    <div id="loading" style="visibility:hidden;padding:10px"><img style="width:60px;height:60px" src = "static/loadingimage.gif"></div>
@@ -48,42 +48,39 @@
   function myTimer() {
 	if (!playingSounds) return;
 	timer +=1;
-//	if (timer < 100){
-	  var character1_image = document.getElementById("character1_image");
-	  if (character1_image.style.left != "") {
-	    character1_image.style.left = (parseInt(character1_image.style.left) - (parseInt(character1_image.style.left)-50)/3) + "vw";
-	    //console.log("character1_image.style.left = "+character1_image.style.left);
-	  }
+    var character1_image = document.getElementById("character1_image");
+	if (character1_image.style.left != "") {
+	  character1_image.style.left = (parseInt(character1_image.style.left) - (parseInt(character1_image.style.left)-50)/3) + "vw";
+	  //console.log("character1_image.style.left = "+character1_image.style.left);
+	}
 
-	  var character2_image = document.getElementById("character2_image");
-	  if (character2_image.style.left != "") {
-	    character2_image.style.left = (parseInt(character2_image.style.left) + (30-parseInt(character2_image.style.left))/3) + "vw";
-	    //console.log("character2_image.style.left = "+character2_image.style.left);
-	  }
-//    }
+    var character2_image = document.getElementById("character2_image");
+    if (character2_image.style.left != "") {
+      character2_image.style.left = (parseInt(character2_image.style.left) + (30-parseInt(character2_image.style.left))/3) + "vw";
+      //console.log("character2_image.style.left = "+character2_image.style.left);
+    }
 	var character1_image = document.getElementById("character1_image");
 	var character2_image = document.getElementById("character2_image");
-//	character1_image.style.left = (parseInt(character1_image.style.left) + Math.random()/20) + "vw";
-//	character2_image.style.left = (parseInt(character2_image.style.left) + Math.random()/20) + "vw";
-//	character1_image.style.top = (parseInt(character1_image.style.top) + Math.random()/10) + "vh";
-//	character2_image.style.top = (parseInt(character2_image.style.top) + Math.random()/10) + "vh";
+    //	character1_image.style.left = (parseInt(character1_image.style.left) + Math.random()/20) + "vw";
+    //	character2_image.style.left = (parseInt(character2_image.style.left) + Math.random()/20) + "vw";
+    //	character1_image.style.top = (parseInt(character1_image.style.top) + Math.random()/10) + "vh";
+    //	character2_image.style.top = (parseInt(character2_image.style.top) + Math.random()/10) + "vh";
 
-console.log("Thinking about doing flip");
-if (timer > 20 && timer <31){
-console.log("flipping...");
-  character2_image.style.transform = "rotate("+(timer-20)*36+"deg)";
-  if (timer < 26){character2_image.style.top = (parseInt(character2_image.style.top) - Math.random()*10) + "vh";}
-  else {character2_image.style.top = (parseInt(character2_image.style.top) + Math.random()*10) + "vh";}
-console.log("flipped");
-}
-if (timer > 40 && timer <51){
-console.log("flipping...");
-  character1_image.style.transform = "rotate("+(timer-40)*36+"deg)";
-  if (timer < 46){character1_image.style.top = (parseInt(character1_image.style.top) - Math.random()*10) + "vh";}
-  else {character1_image.style.top = (parseInt(character1_image.style.top) + Math.random()*10) + "vh";}
-console.log("flipped");
-}
-
+    console.log("Thinking about doing flip");
+    if (timer > 20 && timer <31){
+    console.log("flipping...");
+    character2_image.style.transform = "rotate("+(timer-20)*36+"deg)";
+    if (timer < 26){character2_image.style.top = (parseInt(character2_image.style.top) - Math.random()*10) + "vh";}
+    else {character2_image.style.top = (parseInt(character2_image.style.top) + Math.random()*10) + "vh";}
+    console.log("flipped");
+  }
+  if (timer > 40 && timer <51){
+    console.log("flipping...");
+    character1_image.style.transform = "rotate("+(timer-40)*36+"deg)";
+    if (timer < 46){character1_image.style.top = (parseInt(character1_image.style.top) - Math.random()*10) + "vh";}
+    else {character1_image.style.top = (parseInt(character1_image.style.top) + Math.random()*10) + "vh";}
+    console.log("flipped");
+  }
 }
 var myVar = setInterval(myTimer, 100);
 function loading(){
@@ -102,15 +99,15 @@ element.addEventListener("click", function() {
 //  console.log("Start Movie");
    if (!playingSounds){
       var audio;
-      if (Math.random()<0.6){
-        audio = new Audio('static/the-beat-of-nature-122841.mp3');
+      if (Math.random()<1.0){//ALWAYS PLAY THIS ONE
+        audio = new Audio('static/the-beat-of-nature-122841_veryShort.mp3');
       } else if (Math.random()<0.5){
         audio = new Audio('static/happy-day-113985.mp3');
       } else {
         audio = new Audio('static/motivational-epic-music-inspiring-cinematic-background-music-124265.mp3');
       }
 //      console.log("playing");
-      audio.volume = 0.05;
+      audio.volume = 0.02;
       audio.play();
       var audio2;
       audio2 = new Audio('static/output.mp3');
