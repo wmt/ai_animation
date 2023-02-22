@@ -3,27 +3,42 @@ import os
 import sys, subprocess, string
 import openai
 import requests
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for, session
 import google.auth.transport.requests
 import random
 import shutil
+import uuid
+#from datetime import datetime
+import datetime
 
 app = Flask(__name__)
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
+app.secret_key = 'sdlfnk4dfsddlklknw4'
 
 @app.route("/", methods=("GET", "POST"))
 
-
-
 def index():
+    userDirectoryHeader = 'User_'
 
-    generate_story = True
+
+    #Set the user id so that we can have different people have different stories, and so that we can delete old ones
+    user_id = session.get('user_id')
+    if user_id is None:
+        user_id = userDirectoryHeader+str(datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")+'-'+str(uuid.uuid4()))
+        session['user_id'] = user_id
+
+    deleteOldDirectories(userDirectoryHeader = userDirectoryHeader, user_id = user_id)
+
+    generate_new_story = True
     generate_new_images = True
-    generate_voice = True
-    # generate_story = False
-    # generate_new_images = False
-    # generate_voice = False
+#    generate_new_story = False
+#    generate_new_images = False
+
+    print("user id = "+user_id)
+    if (generate_new_story or generate_new_images) and not os.path.exists(f'static/{user_id}'):
+        os.mkdir(f'static/{user_id}')
+
 
     if request.method == "POST":
         # Get inputs from the online form
@@ -36,10 +51,15 @@ def index():
 #        print("Setting = "+setting_text+", character1 = "+character1_text+", character2 = "+character2_text+", plot = "+plot_text+", style = "+style)
 
         # Set up some possibilities if people leave a given field blank
-        setting_list = ["rain forest", "ocean", "beach", "desert", "stream", "grotto"]
-        character_list = ["A boy named Bob", "a nonbinary person named Kori", "a girl named Dominique", "a girl named Jasmine", "a boy named Jalen", "a boy named Malik", "a girl named Min who started a food bank", "a girl named Mei", "a boy named Mako", "a boy named Ajay", "a girl named Divya", "a girl named Ayla", "a Garden Salamander named Sally", "a Tarantula named Tanya", "a European Glass Lizard named Edgar", "a Kaka named Kauri", "a Pseudomys named Pablo", "a goldendoodle"]
+#        setting_list = ["rain forest", "ocean", "beach", "desert", "stream", "grotto"]
+        setting_list = ["a random location; please make up something neat"]
+        character_list1 = ["A boy named Bob", "a nonbinary person named Kori", "a girl named Dominique", "a girl named Jasmine", "a boy named Jalen", "a boy named Malik", "a girl named Min who started a food bank", "a girl named Mei", "a boy named Mako", "a boy named Ajay", "a girl named Divya", "a girl named Ayla"]
+        character_list2 = ["a parrot", "a Garden Salamander named Sally", "a Tarantula named Tanya", "a European Glass Lizard named Edgar", "a Kaka named Kauri", "a Pseudomys named Pablo", "a goldendoodle"]
+#        character_list = ["a random character; please make up someone or something neat"]
 #        plot_list = ["something about reducing poverty by combining their skills", "something about feeding the hungry in the place where they live", "something about healing the sick using new technology", "something about teaching each other something interesting about the world", "make a world that's equal for all", "help people have clean water", "invent new energy technology", "make better infrastructure for their community", "reduce climate change", "protect endangered species", "resolve a conflict in their neighborhood"]
-        plot_list = [" they travel the country on buses, teaching Anarcho-pacifism to people who sit with them. One day, someone disagrees and they get in a heated argument.",  "desperate for a job, they  accept positions as interpreters, but can't actually speak the native language", "they train a mule to run for Congress", "there's no plot except whatever you make up, but it should be surreal"]
+#        plot_list = [" they travel the country on buses, teaching Anarcho-pacifism to people who sit with them. One day, someone disagrees and they get in a heated argument.",  "desperate for a job, they  accept positions as interpreters, but can't actually speak the native language", "they train a mule to run for Congress", "there's no plot except whatever you make up, but it should be surreal"]
+#        plot_list = ["a random plot; please make up something super weird, factually accurate and appropriate for a ten year old, that has to do with environmental sustainability, but doesn't say so explicitly"]
+        plot_list = ["go on a specific surreal adventure, but don't use the words sepcific, surreal, or adventure"]
  #       style_list = ["child's drawing", "magic marker drawing", "Studio Ghibli"]
         style_list = ["claymation"]
 
@@ -47,23 +67,27 @@ def index():
         if setting_text == "":
             setting_text = random.choice(setting_list)
         if character1_text == "":
-            character1_text = random.choice(character_list)
+            character1_text = random.choice(character_list1)
         if character2_text == "":
-            character2_text = random.choice(character_list)
+            character2_text = random.choice(character_list2)
         if plot_text == "":
             plot_text = random.choice(plot_list)
         if style == "":
             style = random.choice(style_list)
 
         # Get a story from OpenAI
-        prompt = "Write a 10 sentence fable that starts with 'Once upon a time' and ends with 'The End'. The fable is about "+character2_text+ " and "+character1_text+" doing the following: "+plot_text+". It starts with Once upon a time and ends with The End. Don't say it out loud, but it takes place in a "+setting_text+". A short version of a story would be: Once upon a time, there was a girl named Sarah. She was walking down the street when she fell down. Her friend Sam helped her get back up. An expanded version of the story would be: Once upon a time, a girl named Sarah was walking down the street. It was cold outside, so she was wearing a winter parka, long pants, and boots. She was a kind girl with long dark hair and an easy smile. As she was walking, she didn't notice an icy patch in the middle of the sidewalk. It had snowed a few days earlier, and then warmed up, and froze again, so many areas of the city were icy. When Sarah stepped on the ice, her boots went out from under her and she fell down hard. It hurt a lot, and she started to cry. Her friend Sam, a slightly older boy with long hair and Doc Martin boots, happened to be walking along the same street and noticed her crying. He ran over, helped her up, and asked her if she was okay.  She said yes, and felt better that he had stopped. Sam made sure she got to her destination safely. Sarah thanked him, and bought him a cupcake to show her gratitude. The end.  The story you write should be like the expanded version. There should be no sex or violence."
+ #       prompt = "Write a 10 sentence fable that starts with 'Once upon a time' and ends with 'The End'. The fable is about "+character2_text+ " and "+character1_text+" doing the following: "+plot_text+". It starts with Once upon a time and ends with The End. Don't say it out loud, but it takes place in a "+setting_text+". A short version of a story would be: Once upon a time, there was a girl named Sarah. She was walking down the street when she fell down. Her friend Sam helped her get back up. An expanded version of the story would be: Once upon a time, a girl named Sarah was walking down the street. It was cold outside, so she was wearing a winter parka, long pants, and boots. She was a kind girl with long dark hair and an easy smile. As she was walking, she didn't notice an icy patch in the middle of the sidewalk. It had snowed a few days earlier, and then warmed up, and froze again, so many areas of the city were icy. When Sarah stepped on the ice, her boots went out from under her and she fell down hard. It hurt a lot, and she started to cry. Her friend Sam, a slightly older boy with long hair and Doc Martin boots, happened to be walking along the same street and noticed her crying. He ran over, helped her up, and asked her if she was okay.  She said yes, and felt better that he had stopped. Sam made sure she got to her destination safely. Sarah thanked him, and bought him a cupcake to show her gratitude. The end.  The story you write should be like the expanded version. There should be no sex or violence."
+        prompt = "Write a 5 sentence fable, appropriate for a 10 year old, that starts with 'Once upon a time' and ends with 'The End'. The fable is about "+character2_text+ " and "+character1_text+" in "+setting_text+" doing the following: "+plot_text+". "
+
         print("Prompt = "+prompt)
 
         #Check to see if there's anything offensive
+
+        #TODO: check the story to make sure it's appropriate
         print(subprocess.check_output('''curl https://api.openai.com/v1/moderations -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $OPENAI_API_KEY" -d '{"input":"fuck your mother"}' ''', shell=True))
-        print("Made it past the curl")
+
         story_text = "Not generating new story right now"
-        if generate_story:
+        if generate_new_story:
             story_text_from_openai = openai.Completion.create(
                 model="text-davinci-003",
     #            model="text-curie-001",
@@ -76,6 +100,11 @@ def index():
            )
             story_text = story_text_from_openai.choices[0].text
 #        print("*********************\n"+story_text+"\n*********************")
+
+        #Setting default images, which will get bashed if we generate new images below
+        setting_image = "static/default_setting.png"
+        character1_image_transparent = 'static/default_character1.png'
+        character2_image_transparent = 'static/default_character2.png'
 
         # Get some images (assuming the flag is set to true)
         if generate_new_images:
@@ -95,38 +124,36 @@ def index():
                 size="512x512"
             )
 
+
             # Write the setting image and the character images to files
             img_data = requests.get(setting_image['data'][0]['url']).content
-            with open('static/setting_image_downloaded.png', 'wb') as handler:
+            with open(f'static/{user_id}/setting_image_downloaded.png', 'wb') as handler:
                 handler.write(img_data)
 
             img_data = requests.get(character1_image['data'][0]['url']).content
-            with open('static/character1_image_downloaded.png', 'wb') as handler:
+            with open(f'static/{user_id}/character1_image_downloaded.png', 'wb') as handler:
                 handler.write(img_data)
 
             img_data = requests.get(character2_image['data'][0]['url']).content
-            with open('static/character2_image_downloaded.png', 'wb') as handler:
+            with open(f'static/{user_id}/character2_image_downloaded.png', 'wb') as handler:
                 handler.write(img_data)
 
             # Make the character a little brighter so that the background stays white and then do background subtraction for each character.
-            command = 'convert static/character1_image_downloaded.png -brightness-contrast 20x0 static/character1_image_brighter.png'
+            command = f'convert static/{user_id}/character1_image_downloaded.png -brightness-contrast 20x0 static/{user_id}/character1_image_brighter.png'
             subprocess.call(command, shell=True)
-            command = 'convert static/character1_image_brighter.png -bordercolor white -border 1x1 -alpha set -channel RGBA -fuzz 3% -fill none -floodfill +0+0 white -morphology erode square: 1 -shave 1x1 static/character1_image_transparent.png'
+            command = f'convert static/{user_id}/character1_image_brighter.png -bordercolor white -border 1x1 -alpha set -channel RGBA -fuzz 3% -fill none -floodfill +0+0 white -morphology erode square: 1 -shave 1x1 static/{user_id}/character1_image_transparent.png'
             subprocess.call(command, shell=True)
 
-            command = 'convert static/character2_image_downloaded.png -brightness-contrast 20x0  static/character2_image_brighter.png'
+            command = f'convert static/{user_id}/character2_image_downloaded.png -brightness-contrast 20x0  static/{user_id}/character2_image_brighter.png'
             subprocess.call(command, shell=True)
-            command = 'convert static/character2_image_brighter.png -bordercolor white -border 1x1 -alpha set -channel RGBA -fuzz 3% -fill none -floodfill +0+0 white -morphology erode square: 1 -shave 1x1 static/character2_image_transparent.png'
+            command = f'convert static/{user_id}/character2_image_brighter.png -bordercolor white -border 1x1 -alpha set -channel RGBA -fuzz 3% -fill none -floodfill +0+0 white -morphology erode square: 1 -shave 1x1 static/{user_id}/character2_image_transparent.png'
             subprocess.call(command, shell=True)
-        else:
-            print("Using cached images")
-
-        setting_image = "static/setting_image_downloaded.png"
-        character1_image_transparent = 'static/character1_image_transparent.png'
-        character2_image_transparent = 'static/character2_image_transparent.png'
+            setting_image = f"static/{user_id}/setting_image_downloaded.png"
+            character1_image_transparent = f'static/{user_id}/character1_image_transparent.png'
+            character2_image_transparent = f'static/{user_id}/character2_image_transparent.png'
 
         # Synthesize speech
-        if generate_voice:
+        if generate_new_story:
             print("GENERATING VOICE")
             # Instantiates a client
             client = texttospeech.TextToSpeechClient()
@@ -153,20 +180,37 @@ def index():
             )
 
             # The response's audio_content is binary.
-            with open("static/output.mp3", "wb") as out:
+            with open(f"static/{user_id}/unique_story.mp3", "wb") as out:
                 # Write the response to the output file.
                 out.write(response.audio_content)
-                print('Audio content written to file "output.mp3"')
+                print('Audio content written to file "unique_story.mp3"')
+            story_audio = f"static/{user_id}/unique_story.mp3"
         else:
             print("NOT GENERATING VOICE")
+            story_audio = "static/default_story.mp3"
 
-        return redirect(url_for("index",story_text=story_text, setting_image=setting_image, character1_image=character1_image_transparent, character2_image=character2_image_transparent))
+
+        return redirect(url_for("index",story_text=story_text, story_audio=story_audio, setting_image=setting_image, character1_image=character1_image_transparent, character2_image=character2_image_transparent))
 
     story_text = request.args.get("story_text")
     setting_image = request.args.get("setting_image")
     character1_image = request.args.get("character1_image")
     character2_image = request.args.get("character2_image")
     return render_template("index.html", story_text=story_text, setting_image=setting_image, character1_image=character1_image, character2_image=character2_image)
+
+def deleteOldDirectories(userDirectoryHeader, user_id):
+    for subdir, dirs, files in os.walk("static/"):
+        for dir in dirs:
+            if str(dir).startswith(userDirectoryHeader) and not dir == user_id:
+                dirDate = dir.replace(userDirectoryHeader, "")
+                dirDate = dirDate[0:19]
+                print(dirDate)
+                date = datetime.datetime.strptime(dirDate, '%Y_%m_%d_%H_%M_%S')
+                timeDifference = datetime.datetime.now()-date
+                print("How long ago this one was made: "+str(timeDifference))
+                if timeDifference.seconds > 60:
+                    print("Removing "+"static/"+dir)
+                    shutil.rmtree("static/"+dir, ignore_errors = True)
 
 
 def generate_prompt(setting_text):
@@ -331,3 +375,5 @@ def text():
         )
     text = text_from_openai.choices[0].text
     return render_template("text.html", text=text)
+
+

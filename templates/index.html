@@ -110,7 +110,14 @@ element.addEventListener("click", function() {
       audio.volume = 0.02;
       audio.play();
       var audio2;
-      audio2 = new Audio('static/output.mp3');
+
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const story_audio = urlParams.get('story_audio')
+
+
+//      audio2 = new Audio('static/output.mp3');
+      audio2 = new Audio(story_audio);
       audio2.volume = 1;
       audio2.play();
 //      console.log("playing");
