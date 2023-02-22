@@ -100,11 +100,11 @@ element.addEventListener("click", function() {
    if (!playingSounds){
       var audio;
       if (Math.random()<1.0){//ALWAYS PLAY THIS ONE
-        audio = new Audio('static/the-beat-of-nature-122841_veryShort.mp3');
+        audio = new Audio('static/music/the-beat-of-nature-122841_veryShort.mp3');
       } else if (Math.random()<0.5){
-        audio = new Audio('static/happy-day-113985.mp3');
+        audio = new Audio('static/music/happy-day-113985.mp3');
       } else {
-        audio = new Audio('static/motivational-epic-music-inspiring-cinematic-background-music-124265.mp3');
+        audio = new Audio('static/music/motivational-epic-music-inspiring-cinematic-background-music-124265.mp3');
       }
 //      console.log("playing");
       audio.volume = 0.1;
