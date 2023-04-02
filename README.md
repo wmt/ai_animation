@@ -1,8 +1,8 @@
 # AI Animation
-# This system allows a user to input text for two character descriptions, a setting, and a plot, and it generates a narrative using OpenAI, converts it to speech using Google's text-to-speech system, renders a background and characters in DALL-E2, does background subtraction with imagemagick, layers the characters over the background, and does simple animation of them using Javascript while the spoken narrative plays.
+This system allows a user to input text for two character descriptions, a setting, and a plot, and it generates a narrative using OpenAI, converts it to speech using Google's text-to-speech system, renders a background and characters in DALL-E2, does background subtraction with imagemagick, layers the characters over the background, and does simple animation of them using Javascript while the spoken narrative plays.
 
-# Extended from:
-# OpenAI API Quickstart - Python example app
+Extended from:
+OpenAI API Quickstart - Python example app
 
 This is an example pet name generator app used in the OpenAI API [quickstart tutorial](https://beta.openai.com/docs/quickstart). It uses the [Flask](https://flask.palletsprojects.com/en/2.0.x/) web framework. Check out the tutorial or follow the instructions below to get set up.
 
